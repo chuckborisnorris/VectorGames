@@ -1,0 +1,304 @@
+#define W_WIDTH 100
+#define W_HEIGHT 100
+#define SCALAR 5
+#define TEXTSCALAR 3
+#define SHIPSCALAR 3
+
+#include <GLFW/glfw3.h>
+#include <GL/glut.h>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <bits/stdc++.h> 
+#include "asteroid.h"
+#include "ship.h"
+
+int winW = W_WIDTH*SCALAR;
+int winH = W_HEIGHT*SCALAR;
+
+void drawLives(int _x, int _y, int lives)
+{
+int x = _x*SCALAR;
+int y = _y*SCALAR;
+for (int i = 0; i < lives; i++) {
+	glPushMatrix();
+	
+    glTranslatef(float(x-6*i*TEXTSCALAR), y, 0); 
+	glScalef(TEXTSCALAR,-TEXTSCALAR,0);
+	
+    glBegin(GL_LINE_STRIP);
+		glVertex2f(-2, -4);   
+		glVertex2f(0, 4); 
+		glVertex2f(2, -4); 
+		glVertex2f(0, -2); 
+		glVertex2f(-2, -4);  
+	glEnd();
+	glPopMatrix();
+}
+}
+
+void drawString(int _x, int _y, char* c)
+{
+int x = _x*SCALAR;
+int y = _y*SCALAR;
+for (int i = 0; i < strlen(c); i++) {
+	glPushMatrix();
+	
+    glTranslatef(float(x+6*i*TEXTSCALAR), y, 0); 
+	glScalef(TEXTSCALAR,-TEXTSCALAR,0);
+	
+    glBegin(GL_LINE_STRIP);
+    switch ( c[i] ) {
+		case 'P': 
+		glVertex2f(-2, -4);   
+		glVertex2f(-2, 4); 
+		glVertex2f(2, 4); 
+		glVertex2f(2, 0); 
+		glVertex2f(-2, 0);  
+		break;
+		
+		case 'R': 
+		glVertex2f(-2, -4);   
+		glVertex2f(-2, 4); 
+		glVertex2f(2, 4); 
+		glVertex2f(2, 0); 
+		glVertex2f(-2, 0); 
+		glVertex2f(2, -4);  
+		break;
+		
+		case 'E': 
+		glVertex2f(2, -4);   
+		glVertex2f(-2, -4); 
+		glVertex2f(-2, 0); 
+		glVertex2f(2, 0); 
+		glVertex2f(-2, 0); 
+		glVertex2f(-2, 4);  
+		glVertex2f(2, 4);  
+		break;
+		
+		case 'S': 
+		glVertex2f(-2, -4);   
+		glVertex2f(2, -4); 
+		glVertex2f(2, 0); 
+		glVertex2f(-2, 0); 
+		glVertex2f(-2, 4);  
+		glVertex2f(2, 4);  
+		break;
+		
+		case 'T': 
+		glVertex2f(0, -4);   
+		glVertex2f(0, 4); 
+		glVertex2f(-2, 4);  
+		glVertex2f(2, 4);  
+		break;
+		
+		case 'A': 
+		glVertex2f(-2, -4);   
+		glVertex2f(0, 4); 
+		glVertex2f(2, -4); 
+		glVertex2f(1, 0); 
+		glVertex2f(-1, 0); 
+		break;
+		
+		case '1': 
+		glVertex2f(0, -4);   
+		glVertex2f(0, 4); 
+		break;
+		
+		case '2': 
+		glVertex2f(2, -4);   
+		glVertex2f(-2, -4); 
+		glVertex2f(-2, 0); 
+		glVertex2f(2, 0); 
+		glVertex2f(2, 4);  
+		glVertex2f(-2, 4);  
+		break;
+		
+		default: break;
+	}
+	glEnd();
+	glPopMatrix();
+}
+}
+
+void drawScore(int _x, int _y, int score)
+{
+int x = _x*SCALAR;
+int y = _y*SCALAR;
+
+std::string tmp = std::to_string(score);
+reverse(tmp.begin(),tmp.end());
+char const *c = tmp.c_str();
+	
+for (int i = 9; i > -1; i--) {
+	glPushMatrix();
+	
+    glTranslatef(float(x-6*i*TEXTSCALAR), y, 0); 
+	glScalef(TEXTSCALAR,-TEXTSCALAR,0);
+	
+    glBegin(GL_LINE_STRIP);
+    switch ( c[i] ) {
+		case '5': 
+		glVertex2f(-2, -4);   
+		glVertex2f(2, -4); 
+		glVertex2f(2, 0); 
+		glVertex2f(-2, 0); 
+		glVertex2f(-2, 4);  
+		glVertex2f(2, 4);  
+		break;
+		
+		case '0': 
+		glVertex2f(-2, -4);   
+		glVertex2f(-2, 4); 
+		glVertex2f(2, 4);  
+		glVertex2f(2, -4);
+		glVertex2f(-2, -4); 		
+		break;
+		
+		case '1': 
+		glVertex2f(0, -4);   
+		glVertex2f(0, 4); 
+		break;
+		
+		case '2': 
+		glVertex2f(2, -4);   
+		glVertex2f(-2, -4); 
+		glVertex2f(-2, 0); 
+		glVertex2f(2, 0); 
+		glVertex2f(2, 4);  
+		glVertex2f(-2, 4);  
+		break;
+		
+		case '3': 
+		glVertex2f(-2, -4);   
+		glVertex2f(2, -4); 
+		glVertex2f(2, 0); 
+		glVertex2f(-2, 0); 
+		glVertex2f(2, 0); 
+		glVertex2f(2, 4);  
+		glVertex2f(-2, 4);  
+		break;
+		
+		case '4': 
+		glVertex2f(2, -4);   
+		glVertex2f(2, 4); 
+		glVertex2f(2, 0); 
+		glVertex2f(-2, 0); 
+		glVertex2f(-2, 4);    
+		break;
+		
+		case '6': 
+		glVertex2f(2, 4); 
+		glVertex2f(-2, 4);   
+		glVertex2f(-2, -4); 
+		glVertex2f(2, -4); 
+		glVertex2f(2, 0); 
+		glVertex2f(-2, 0);  
+		break;
+		
+		case '7': 
+		glVertex2f(2, -4);   
+		glVertex2f(2, 4); 
+		glVertex2f(-2, 4); 
+		break;
+		
+		case '8': 
+		glVertex2f(-2, -4);   
+		glVertex2f(-2, 4); 
+		glVertex2f(2, 4);  
+		glVertex2f(2, -4);  
+		break;
+		
+		case '9': 
+		glVertex2f(2, -4);   
+		glVertex2f(2, 4); 
+		glVertex2f(-2, 4); 
+		glVertex2f(-2, 0); 
+		glVertex2f(2, 0); 
+		break;
+		
+		default: 
+		glVertex2f(-2, -4);   
+		glVertex2f(-2, 4); 
+		glVertex2f(2, 4);  
+		glVertex2f(2, -4);
+		glVertex2f(-2, -4); 	
+		break;
+	}
+	glEnd();
+	glPopMatrix();
+}
+}
+
+
+
+void Asteroid::drawAsteroid()
+{
+float real_x = x*SCALAR;
+float real_y = y*SCALAR;
+	glPushMatrix();
+	
+    glTranslatef(real_x, real_y, 0); 
+	glScalef(scale, scale, 0);
+	glRotatef(rot, 0, 0, 1);
+	
+    glBegin(GL_LINE_LOOP);
+	
+	glVertex2f(0, -3);
+	glVertex2f(-3, -2);
+	glVertex2f(-2, -1);
+	glVertex2f(-3, 2);
+	glVertex2f(1, 3);
+	glVertex2f(2, 1);
+	glVertex2f(3, 1);
+	glVertex2f(3, -1);
+	
+	glEnd();
+	glPopMatrix();
+
+}
+
+void Ship::drawShip()
+{
+float real_x = x*SCALAR;
+float real_y = y*SCALAR;
+	glPushMatrix();
+	
+    glTranslatef(real_x, real_y, 0); 
+	glScalef(SHIPSCALAR, SHIPSCALAR, 0);
+	glRotatef(rot, 0, 0, 1);
+	
+    glBegin(GL_LINE_STRIP);
+		glVertex2f(-2, -4);   
+		glVertex2f(0, 4); 
+		glVertex2f(2, -4); 
+		glVertex2f(0, -2); 
+		glVertex2f(-2, -4);
+	glEnd();
+	glPopMatrix();
+
+}
+
+void Bullet::drawBullet()
+{
+float real_x = x*SCALAR;
+float real_y = y*SCALAR;
+	glPushMatrix();
+	
+    glTranslatef(real_x, real_y, 0); 
+	glScalef(SHIPSCALAR, SHIPSCALAR, 0);
+	
+    glBegin(GL_LINE_STRIP);
+		glVertex2f(-2, 0);   
+		glVertex2f(0, 2); 
+		glVertex2f(2, 0); 
+		glVertex2f(0, -2); 
+		glVertex2f(-2, 0);
+	glEnd();
+	glPopMatrix();
+
+}
+
+
+
+

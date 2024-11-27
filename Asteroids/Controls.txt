@@ -1,0 +1,13 @@
+P1
+Start		Enter
+<- 			Left Arrow
+-> 			Right Arrow
+Thrusters	Up Arrow
+Fire		Right Shift
+
+P2
+Start		Space Bar
+<-			A
+->			D
+Thrusters	W
+Fire		Left Shift
